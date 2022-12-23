@@ -1,7 +1,9 @@
 from fastapi import FastAPI, Request
+from .routers import auth_url
 
 
 app = FastAPI()
+app.include_router(auth_url.router)
 
 callback_response: dict = {"message": "Lise"}
 
