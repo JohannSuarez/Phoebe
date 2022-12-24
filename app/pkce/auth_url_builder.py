@@ -11,4 +11,3 @@ class URLBuilder:
         for param, value in self.query_params.items():
             url += f"{param}={value}&"
         return url[:-1]  # Remove the trailing "&"
-

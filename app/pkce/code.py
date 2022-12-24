@@ -44,5 +44,4 @@ def generate_code_challenge(code_verifier: str) -> str:
 
     # Trim the padding '=' characters
     code_challenge = code_challenge.rstrip('=')
-
     return code_challenge
