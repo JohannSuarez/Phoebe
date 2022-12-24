@@ -14,7 +14,7 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
-@app.post("/callback/")
+@app.get("/callback")
 async def callback(code: str, state: str):
     resp_str = f"CODE = {code}, STATE = {state}"
     return {"Response": resp_str}
