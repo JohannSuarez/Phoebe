@@ -2,6 +2,11 @@
 
 An implementation of OAuth 2.0 Authorization in the context of a Fitbit Application.  Following the OAuth 2.0 authorization code flow, this app serves as a client to access a user's Fitbit data. This is both a practical use project as well as a study guide.
 
+## Preparation
+
+Create an .env file at the root of the repository and create values for
+CLIENT_ID and CLIENT_SECRET.
+
 ## Workflow
 
 There are currently two endpoints — **/auth_url** and **/callback**
