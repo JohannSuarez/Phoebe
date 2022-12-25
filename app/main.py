@@ -94,10 +94,11 @@ async def callback(code: str, state: str):
     client_id: str = cl_id
     client_secret: str = cl_secret
     basic_token: str = client_id + ":" + client_secret
+    basic_token = base64.b64encode(basic_token.encode('utf-8')).decode('utf-8')
 
     url = "https://api.fitbit.com/oauth2/token"
 
-    headers = {"Authorization": f"Basic {base64.b64encode(basic_token.encode('utf-8')).decode('utf-8')}",
+    headers = {"Authorization": f"Basic {basic_token}",
                "Content-Type": "application/x-www-form-urlencoded"}
 
     data = {"client_id": client_id,
