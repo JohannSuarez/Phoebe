@@ -17,7 +17,7 @@ from .utils.request_exceptions import (
 
 from .utils.app_exceptions import app_exception_handler
 
-import base64
+import base64, requests
 
 
 create_tables()
@@ -25,7 +25,6 @@ create_tables()
 config = dotenv_values(".env")
 # These variables have to be checked otherwise, we raise an Exception
 # because the app is useless without these.
-# Create a custom error for these.
 cl_id: str = config["CLIENT_ID"] or ""
 cl_secret: str = config["CLIENT_SECRET"] or ""
 
@@ -58,11 +57,9 @@ print(pkce.non_endpoint_find_state("dela").code_verifier)
 async def custom_http_exception_handler(request, e):
     return await http_exception_handler(request, e)
 
-
 @app.exception_handler(RequestValidationError)
 async def custom_validation_exception_handler(request, e):
     return await request_validation_exception_handler(request, e)
-
 
 @app.exception_handler(AppExceptionCase)
 async def custom_app_exception_handler(request, e):
@@ -88,16 +85,29 @@ async def callback(code: str, state: str):
     Please refer heavily to this doc:
     https://dev.fitbit.com/build/reference/web-api/troubleshooting-guide/oauth2-tutorial/?clientEncodedId=238N67&redirectUri=https://johanns.xyz/fitbitapp/callback&applicationType=SERVER
     '''
-    resp_str = f"CODE = {code}, STATE = {state}"
+
+    try:
+        code_verifier: str = pkce.non_endpoint_find_state(state).code_verifier # type: ignore
+    except Exception:
+        return {"Response": f"Issue with code verifier . Check if state {state} exists on db."}
 
     client_id: str = cl_id
     client_secret: str = cl_secret
-
     basic_token: str = client_id + ":" + client_secret
 
-    authorization_header: str = f"Basic {base64.b64encode(basic_token.encode('utf-8')).decode('utf-8')}"
-    auth_code: str = code
-    code_verifier: str = pkce.non_endpoint_find_state(state).code_verifier # type: ignore
+    url = "https://api.fitbit.com/oauth2/token"
 
+    headers = {"Authorization": f"Basic {base64.b64encode(basic_token.encode('utf-8')).decode('utf-8')}",
+               "Content-Type": "application/x-www-form-urlencoded"}
 
+    data = {"client_id": client_id,
+            "grant_type": "authorization_code",
+            "code": code,
+            "code_verifier": code_verifier}
+
+    response = requests.post(url, headers=headers, data=data)
+    print(response.text)
+
+    # You can access the response body using the `text` attribute.
+    resp_str = response.text or f"CODE = {code}, STATE = {state}, CODE_VERIFIER = {code_verifier}"
     return {"Response": resp_str}

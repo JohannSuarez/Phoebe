@@ -17,7 +17,7 @@ router = APIRouter(
 
 def get_db_2():
     '''
-    I need this purely for the non-endpoint CRUD operations.
+    I need this function purely for the non-endpoint CRUD operations.
     It's a hack but I'm getting desperate.
     '''
     SQLALCHEMY_DATABASE_URL = "sqlite:///./pkce.db"
@@ -29,6 +29,7 @@ def get_db_2():
     # Create a session
     Session = sessionmaker(bind=engine)
     session = Session()
+
     # Return the session
     return session
 

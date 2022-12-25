@@ -1,8 +1,12 @@
 from fastapi import APIRouter
 from ..pkce import code, auth_url_builder
+from ..schemas.pkce import PKCEItemCreate
+from ..routers.pkce import non_endpoint_create_pkce
+from dotenv import dotenv_values
 
 
 router = APIRouter()
+config = dotenv_values(".env")
 
 
 @router.get("/auth_url", status_code=200)
@@ -20,14 +24,23 @@ async def authorization_url():
 
     # The code verifier must be stored along with the state.
     code_verifier: str = code.generate_code_verifier()
+    # The state and code_verifier can use the same method.
+    state: str = code.generate_code_verifier()
+
+    pkce_dict = {
+            "state": state,
+            "code_verifier": code_verifier,
+    }
+    non_endpoint_create_pkce(PKCEItemCreate(**pkce_dict))
+    
     
     param_dict: dict = {
-        'client_id': '238N67',   # Needs to be sourced as an env var.
+        'client_id': config["CLIENT_ID"] or "",
         'response_type': 'code', # A constant
         'scope': 'activity+cardio_fitness+electrocardiogram+heartrate+location+nutrition+oxygen_saturation+profile+respiratory_rate+settings+sleep+social+temperature+weight',
         'code_challenge': code.generate_code_challenge(code_verifier),
         'code_challenge_method': 'S256', # A constant
-        'state': code.generate_code_verifier(), # The state and code_verifier can use the same method.
+        'state': state, 
     }
 
     # Building the Authorization URL
