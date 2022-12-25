@@ -110,5 +110,5 @@ async def callback(code: str, state: str):
 
     # You can access the response body using the `text` attribute.
     #resp_str = response.text or f"CODE = {code}, STATE = {state}, CODE_VERIFIER = {code_verifier}"
-    resp_str = f"CODE = {code}, STATE = {state}, CODE_VERIFIER = {code_verifier}"
+    resp_str = f"CODE = {code}, STATE = {state}, CODE_VERIFIER = {code_verifier}, BASIC_TOKEN = {basic_token}"
     return {"Response": resp_str}
