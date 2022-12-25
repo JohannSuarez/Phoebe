@@ -105,9 +105,10 @@ async def callback(code: str, state: str):
             "code": code,
             "code_verifier": code_verifier}
 
-    response = requests.post(url, headers=headers, data=data)
-    print(response.text)
+    #response = requests.post(url, headers=headers, data=data)
+    #print(response.text)
 
     # You can access the response body using the `text` attribute.
-    resp_str = response.text or f"CODE = {code}, STATE = {state}, CODE_VERIFIER = {code_verifier}"
+    #resp_str = response.text or f"CODE = {code}, STATE = {state}, CODE_VERIFIER = {code_verifier}"
+    resp_str = f"CODE = {code}, STATE = {state}, CODE_VERIFIER = {code_verifier}"
     return {"Response": resp_str}
