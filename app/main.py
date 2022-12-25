@@ -33,6 +33,8 @@ if not (cl_id and cl_secret):
 
 app = FastAPI()
 app.include_router(auth_url.router)
+app.include_router(pkce.router)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=['*'],
@@ -77,7 +79,7 @@ async def callback(code: str, state: str):
     try:
         code_verifier: str = pkce.non_endpoint_find_state(state).code_verifier # type: ignore
     except Exception:
-        return {"Response": f"Issue with code verifier . Check if state {state} exists on db."}
+        return {"response": f"Issue with code verifier . Check if state {state} exists on db."}
 
     client_id: str = cl_id
     client_secret: str = cl_secret
@@ -98,4 +100,4 @@ async def callback(code: str, state: str):
 
     # You can access the response body using the `text` attribute.
     resp_str = response.text or f"CODE = {code}, STATE = {state}, CODE_VERIFIER = {code_verifier}"
-    return {"Response": resp_str}
+    return {"response": resp_str}

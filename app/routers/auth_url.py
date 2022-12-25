@@ -50,4 +50,4 @@ async def authorization_url():
     for param in param_dict:
         url_builder.add_query_param(param, param_dict[param])
 
-    return { "URL": url_builder.create().strip() }
+    return { "url": url_builder.create().strip() }
