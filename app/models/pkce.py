@@ -1,7 +1,7 @@
 from sqlalchemy import Column, String
-from .database import Base
+from ..config.database import Base
 
-class State(Base):
+class PKCEState(Base):
     __tablename__ = "pkce_states"
 
     state = Column(String(100), primary_key=True, index=True)
