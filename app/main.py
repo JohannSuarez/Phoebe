@@ -41,18 +41,6 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
-'''
-from .schemas.pkce import PKCEItemCreate
-pkce_dict = {"state": "wisemensay", "code_verifier": "onlyfoolsrushin"} 
-pkce.non_endpoint_create_pkce(PKCEItemCreate(**pkce_dict))
-
-pkce_dict2 = {"state": "buticanthelp", "code_verifier": "fallinginlovewithyou"} 
-pkce.non_endpoint_create_pkce(PKCEItemCreate(**pkce_dict2))
-
-# This works, despite the error.
-print(pkce.non_endpoint_find_state("dela").code_verifier) 
-'''
-
 @app.exception_handler(StarletteHTTPException)
 async def custom_http_exception_handler(request, e):
     return await http_exception_handler(request, e)
@@ -107,9 +95,7 @@ async def callback(code: str, state: str):
             "code_verifier": code_verifier}
 
     response = requests.post(url, headers=headers, data=data)
-    print(response.text)
 
     # You can access the response body using the `text` attribute.
     resp_str = response.text or f"CODE = {code}, STATE = {state}, CODE_VERIFIER = {code_verifier}"
-    #resp_str = f"CODE = {code}, STATE = {state}, CODE_VERIFIER = {code_verifier}, BASIC_TOKEN = {basic_token}"
     return {"Response": resp_str}

@@ -35,19 +35,6 @@ def generate_code_challenge(code_verifier: str) -> str:
     requires the use of libraries that implement the SHA-256 
     hash and Base64Url encoding specifications.
     """
-
-    '''
-        #This algorithm is faulty.
-        # Hash the code verifier using SHA-256
-        code_challenge = hashlib.sha256(code_verifier.encode('utf-8')).hexdigest()
-
-        # Encode the code challenge usign base64url encoding
-        code_challenge = base64.urlsafe_b64encode(code_challenge.encode('utf-8')).decode('utf-8')
-
-        # Trim the padding '=' characters
-        code_challenge = code_challenge.rstrip('=')
-        return code_challenge
-    '''
     # Calculate the SHA-256 hash of the code verifier
     hash = hashlib.sha256(code_verifier.encode("utf-8")).digest()
 

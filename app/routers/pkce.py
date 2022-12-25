@@ -17,8 +17,7 @@ router = APIRouter(
 
 def get_db_2():
     '''
-    I need this function purely for the non-endpoint CRUD operations.
-    It's a hack but I'm getting desperate.
+    A get_db method explicitly for functions that aren't endpoints.
     '''
     SQLALCHEMY_DATABASE_URL = "sqlite:///./pkce.db"
     engine = create_engine(
@@ -43,12 +42,10 @@ def non_endpoint_find_state(state: str):
     result = PKCEService(db).get_item(state)
     return handle_result(result)
 
-
 @router.post("/state/", response_model=PKCEItem)
 async def create_item(item: PKCEItemCreate, db: get_db = Depends()): # type: ignore
     result = PKCEService(db).create_item(item)
     return handle_result(result)
-
 
 @router.get("/state/{item_id}", response_model=PKCEItem)
 async def get_item(item_id: str, db: get_db = Depends()): # type: ignore
