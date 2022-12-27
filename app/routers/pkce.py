@@ -63,6 +63,7 @@ async def renew_access_token(refresh_token: str):
     For more information:
     https://dev.fitbit.com/build/reference/web-api/authorization/refresh-token/
     """
+
     client_id: str = config["CLIENT_ID"] or ""
     client_secret: str = config["CLIENT_SECRET"] or ""
     basic_token: str = client_id + ":" + client_secret
@@ -73,8 +74,18 @@ async def renew_access_token(refresh_token: str):
             "Authorization": f"Basic {basic_token}",
             "Content-Type": "application/x-www-form-urlencoded"}
 
-    data = {"grant_type": f"refresh_token&refresh_token={refresh_token}"}
+    # This is wrong. It's not a properly formatted dictionary.
+    # Even ChatGPT pointed this out.
 
-    response = requests.post(url, headers=headers, data=data)
+    data = {"grant_type": "refresh_token",
+            "client_id": client_id,
+            "refresh_token": refresh_token}
 
-    return {"response": response}
+    response = requests.post(url, headers=headers, data=data).json()
+
+    new_tokens = {"access_token": response['access_token'],
+                  "refresh_token": response['refresh_token']
+    }
+
+    return new_tokens
+
