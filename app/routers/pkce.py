@@ -74,9 +74,6 @@ async def renew_access_token(refresh_token: str):
             "Authorization": f"Basic {basic_token}",
             "Content-Type": "application/x-www-form-urlencoded"}
 
-    # This is wrong. It's not a properly formatted dictionary.
-    # Even ChatGPT pointed this out.
-
     data = {"grant_type": "refresh_token",
             "client_id": client_id,
             "refresh_token": refresh_token}
@@ -88,4 +85,3 @@ async def renew_access_token(refresh_token: str):
     }
 
     return new_tokens
-
