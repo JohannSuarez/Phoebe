@@ -44,6 +44,9 @@ def non_endpoint_find_state(state: str):
     result = PKCEService(db).get_item(state)
     return handle_result(result)
 
+'''
+    Routes not in use.
+
 @router.post("/state/", response_model=PKCEItem)
 async def create_item(item: PKCEItemCreate, db: get_db = Depends()): # type: ignore
     result = PKCEService(db).create_item(item)
@@ -53,7 +56,7 @@ async def create_item(item: PKCEItemCreate, db: get_db = Depends()): # type: ign
 async def get_item(item_id: str, db: get_db = Depends()): # type: ignore
     result = PKCEService(db).get_item(item_id)
     return handle_result(result)
-
+'''
 @router.post("/renew_token")
 async def renew_access_token(refresh_token: str):
     """
@@ -80,6 +83,7 @@ async def renew_access_token(refresh_token: str):
 
     response = requests.post(url, headers=headers, data=data).json()
 
+    print(response)
     new_tokens = {"access_token": response['access_token'],
                   "refresh_token": response['refresh_token']
     }
