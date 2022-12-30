@@ -4,7 +4,7 @@ An implementation of OAuth 2.0 Authorization in the context of a Fitbit Applicat
 
 ## Workflow
 
-There are currently two endpoints — **/auth_url** and **/callback**
+There are currently three endpoints — **/auth_url**, **/callback**, and **renew-token**
 
 The **/auth_url** endpoint generates an authorization URL to be used by a user to grant this app access to their Fitbit data. The authorization URL includes several parameters to specify the details of the authorization request such as:
 
