@@ -43,6 +43,11 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
+@app.get("/")
+def read_root():
+    return {"service_name": "Phoebe",
+            "status": "healthy"}
+
 @app.exception_handler(StarletteHTTPException)
 async def custom_http_exception_handler(request, e):
     return await http_exception_handler(request, e)
